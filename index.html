@@ -26,13 +26,13 @@ button.alt{background:#e8f5ee;color:#087653}button:disabled{opacity:.5}
 <div id="reader"></div>
 <button id="start" onclick="startScan()">Start Live Camera</button>
 <button id="stop" class="alt" onclick="stopScan()" disabled>Stop Camera</button>
-<div id="status" class="status">Tap Start Live Camera and allow camera permission.</div>
+<div id="status" class="status">Tap Start Live Camera to scan the next employee.</div>
 </div>
 <div class="panel">
 <div style="font-weight:700">Scan result</div>
 <div id="result" class="status">No QR detected yet.</div>
 <button id="continue" onclick="continueToCheckin()" disabled>Continue to Employee Check-in</button>
-<p class="small">QR detection does not check anyone in. The employee details will open in the secure Event Entry app, where staff must press Confirm Check-in.</p>
+<p class="small">QR detection does not check anyone in. Employee details open in the secure Event Entry app, where staff must press Confirm Check-in. After confirmation, this scanner page opens again; tap Start Live Camera for the next employee.</p>
 </div>
 </main></div>
 <script>
@@ -82,5 +82,9 @@ function continueToCheckin(){
   u.searchParams.set('scan',detected);
   location.href=u.href;
 }
-window.addEventListener('load',()=>{if(new URLSearchParams(location.search).get('autostart')==='1'){setTimeout(()=>startScan(),350);}});
+// Do not auto-start camera on page load: browsers require a user gesture after redirect.
+window.addEventListener('load',()=>{
+  returnUrl=safeReturnUrl();
+  if(returnUrl) setStatus('Ready for next employee. Tap Start Live Camera.');
+});
 </script></body></html>
